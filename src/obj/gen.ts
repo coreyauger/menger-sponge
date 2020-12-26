@@ -309,11 +309,11 @@ const s0 = buildSponge(cube, new Vertex(-2, 0, 0), 1);
 const s1 = buildSponge(s0, new Vertex(20, 0, 0), 3);
 const s2 = buildSponge(s1, new Vertex(20, 0, 0), 9);
 const s3 = buildSponge(s2, new Vertex(20, 0, 0), 27);
-const s4 = buildSponge(s3, new Vertex(20, 0, 0), 81);
+//const s4 = buildSponge(s3, new Vertex(20, 0, 0), 81);
 
 console.log("Writing file ...");
 
-fs.writeFile("./public/obj/cube.obj", s4.toObj(), function (err) {
+fs.writeFile("./public/obj/cube.obj", s3.toObj(), function (err) {
   if (err) throw err;
   console.log("Saved!");
 });

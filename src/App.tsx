@@ -3,6 +3,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import * as THREE from "three";
 import { useEffect } from "react";
+import { ObjectLoader } from "three";
+import { OBJLoader } from "./OBJLoader";
 
 // create the scene
 const scene = new THREE.Scene();
@@ -45,6 +47,28 @@ const material = new THREE.MeshBasicMaterial({
   color: 0xaaaaaa,
   wireframe: true,
 });
+
+// instantiate a loader
+const loader = new OBJLoader();
+
+// load a resource
+loader.load(
+  // resource URL
+  "obj/cube.obj",
+  // called when resource is loaded
+  function (object) {
+    console.log("** Adding obj");
+    scene.add(object);
+  },
+  // called when loading is in progresses
+  function (xhr) {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  // called when loading has errors
+  function (error) {
+    console.log("An error happened", error);
+  }
+);
 
 // create a box and add it to the scene
 const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);

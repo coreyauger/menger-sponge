@@ -180,9 +180,9 @@ var s0 = buildSponge(cube, new Vertex(-2, 0, 0), 1);
 var s1 = buildSponge(s0, new Vertex(20, 0, 0), 3);
 var s2 = buildSponge(s1, new Vertex(20, 0, 0), 9);
 var s3 = buildSponge(s2, new Vertex(20, 0, 0), 27);
-var s4 = buildSponge(s3, new Vertex(20, 0, 0), 81);
+//const s4 = buildSponge(s3, new Vertex(20, 0, 0), 81);
 console.log("Writing file ...");
-fs.writeFile("./public/obj/cube.obj", s4.toObj(), function (err) {
+fs.writeFile("./public/obj/cube.obj", s3.toObj(), function (err) {
     if (err)
         throw err;
     console.log("Saved!");
