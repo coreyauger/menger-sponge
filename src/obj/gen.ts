@@ -1,8 +1,6 @@
-console.log("HELLO !!!", process.argv);
 import * as fs from "fs";
 
 let vCount = 1;
-let fCount = 0;
 
 class Vertex {
   p0: number;
@@ -212,7 +210,7 @@ const buildCube = (): Mesh => {
   return m;
 };
 
-const buildSponge = (master: Obj, translate: Vertex, depth: number): Obj => {
+const buildSponge = (master: Obj, depth: number): Obj => {
   const obj = new Obj();
   // left-bottom
   obj.geom = obj.geom.concat(
@@ -296,24 +294,23 @@ const buildSponge = (master: Obj, translate: Vertex, depth: number): Obj => {
   obj.geom = obj.geom.concat(
     master.clone().geom.map((m) => m.translate(new Vertex(0, depth, -depth)))
   );
-
-  //obj.translate(translate);
   return obj;
 };
 
-//console.log(mesh.toObj());
 const cube = new Obj();
 cube.geom.push(buildCube());
 
-const s0 = buildSponge(cube, new Vertex(-2, 0, 0), 1);
-const s1 = buildSponge(s0, new Vertex(20, 0, 0), 3);
-const s2 = buildSponge(s1, new Vertex(20, 0, 0), 9);
-const s3 = buildSponge(s2, new Vertex(20, 0, 0), 27);
-//const s4 = buildSponge(s3, new Vertex(20, 0, 0), 81);
+const iter = parseInt(process.argv[2]);
+let seed = buildSponge(cube, 1);
+for (let x = 1; x <= iter; x++) {
+  seed = buildSponge(seed, x * 3);
+}
 
 console.log("Writing file ...");
 
-fs.writeFile("./public/obj/cube.obj", s3.toObj(), function (err) {
+fs.writeFile("./public/obj/cube.obj", seed.toObj(), function (err) {
   if (err) throw err;
   console.log("Saved!");
+  console.log(`Vertex Count: ${vCount}`);
+  console.log(`Face Count: ${vCount / 3}`);
 });

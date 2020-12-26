@@ -1,9 +1,8 @@
 "use strict";
 exports.__esModule = true;
-console.log("HELLO !!!", process.argv);
 var fs = require("fs");
+console.log("HELLO !!!", process.argv);
 var vCount = 1;
-var fCount = 0;
 var Vertex = /** @class */ (function () {
     function Vertex(p0, p1, p2) {
         var _this = this;
@@ -127,7 +126,7 @@ var buildCube = function () {
     m.tris.push(new Tri(new Vertex(-0.5, -0.5, 0.5), new Vertex(-0.5, -0.5, -0.5), new Vertex(0.5, -0.5, -0.5)));
     return m;
 };
-var buildSponge = function (master, translate, depth) {
+var buildSponge = function (master, depth) {
     var obj = new Obj();
     // left-bottom
     obj.geom = obj.geom.concat(master
@@ -176,14 +175,28 @@ var buildSponge = function (master, translate, depth) {
 //console.log(mesh.toObj());
 var cube = new Obj();
 cube.geom.push(buildCube());
-var s0 = buildSponge(cube, new Vertex(-2, 0, 0), 1);
-var s1 = buildSponge(s0, new Vertex(20, 0, 0), 3);
-var s2 = buildSponge(s1, new Vertex(20, 0, 0), 9);
-var s3 = buildSponge(s2, new Vertex(20, 0, 0), 27);
+function builder(obj, depth, iter) {
+    if (!iter)
+        return obj;
+    return builder(buildSponge(obj, depth), depth * 3, iter--);
+}
+var iter = parseInt(process.argv[2]);
+var seed = buildSponge(cube, 1);
+for (var x = 1; x <= iter; x++) {
+    seed = buildSponge(seed, x * 3);
+}
+/*
+const s0 = buildSponge(cube, 1);
+const s1 = buildSponge(s0, 3);
+const s2 = buildSponge(s1, 9);
+const s3 = buildSponge(s2, 27);
 //const s4 = buildSponge(s3, new Vertex(20, 0, 0), 81);
+*/
 console.log("Writing file ...");
-fs.writeFile("./public/obj/cube.obj", s3.toObj(), function (err) {
+fs.writeFile("./public/obj/cube.obj", seed.toObj(), function (err) {
     if (err)
         throw err;
     console.log("Saved!");
+    console.log("Vertex Count: " + vCount);
+    console.log("Face Count: " + vCount / 3);
 });

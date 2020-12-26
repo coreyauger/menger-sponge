@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "genobj": "tsc ./src/obj/*.ts; node -max-old-space-size=4096 ./src/obj/gen.js testing"
+    "genobj": "tsc ./src/obj/*.ts; node -max-old-space-size=12096 ./src/obj/gen.js 3"
   },
   "eslintConfig": {
     "extends": [
